@@ -16,7 +16,7 @@ db = SQLAlchemy()
 db.init_app(app)
 
 class User(UserMixin, db.Model):
-    
+    #add model of name, email and password
 
     @staticmethod
     def check_user(email):
