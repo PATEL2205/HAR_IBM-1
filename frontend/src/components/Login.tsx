@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // 1. Define the Validation Schema
 const loginSchema = z.object({
@@ -14,6 +14,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
   // 2. Initialize Hook Form
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
@@ -27,7 +28,13 @@ const Login: React.FC = () => {
     });
     const result = await response.json();
     console.log("Login response:", result);
-    // Handle success/error here
+    if (response.ok) {
+        alert("Login Successful!");
+        navigate('/dashboard');
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || "Registration failed");
+      }
   } catch (error) {
     console.error("Login error:", error);
   }

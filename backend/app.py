@@ -27,6 +27,9 @@ class User(UserMixin, db.Model):
     def check_user(email):
         # DB query for searching for user in the database.
         return User.query.filter_by(email=email).first()
+    
+    def verify_password(self, password):
+        return check_password_hash(self.password, password)
 
 @app.route('/api/test')
 def get_activity():
@@ -41,11 +44,14 @@ def login():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
-    return jsonify({
-        "message": "Login successful",
-        "email": email,
-        "token": "your-auth-token-here"
-    }), 200
+    user = User.check_user(email)
+
+    if user and user.verify_password(password):
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        return jsonify({"error": "Email already registered"}), 400
+
+    
 
 @app.route('/api/register', methods=['POST'])
 def register():
