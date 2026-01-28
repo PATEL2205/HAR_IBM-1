@@ -11,7 +11,7 @@ app = Flask(__name__)
 # This line tells Flask to allow requests from your React app
 CORS(app)
 # Upload folder configuration
-UPLOAD_FOLDER = 'static'
+UPLOAD_FOLDER = r'C:\Users\dhruv\Documents\Project(Clg)\Sem8\HAR_IBM\backend\static'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
