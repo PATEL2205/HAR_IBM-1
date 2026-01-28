@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -25,6 +25,11 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
+  
+  // States for toggling password visibility
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
   });
@@ -102,25 +107,45 @@ const Register: React.FC = () => {
                 <label className="ml-1 block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2 transition-colors group-focus-within:text-indigo-400">
                   Password
                 </label>
-                <input 
-                  type="password" 
-                  {...register("password")} 
-                  placeholder="••••••••"
-                  className={`w-full bg-white/5 border px-4 py-3.5 rounded-2xl text-white outline-none transition-all placeholder:text-slate-600 focus:bg-white/10 ${errors.password ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' : 'border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'}`} 
-                />
+                <div className="relative">
+                  <input 
+                    type={showPass ? "text" : "password"} 
+                    {...register("password")} 
+                    placeholder="••••••••"
+                    className={`w-full bg-white/5 border px-4 py-3.5 pr-12 rounded-2xl text-white outline-none transition-all placeholder:text-slate-600 focus:bg-white/10 ${errors.password ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' : 'border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'}`} 
+                  />
+                  <button 
+                    type="button" 
+                    onClick={() => setShowPass(!showPass)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase text-indigo-400 hover:text-white transition-colors"
+                  >
+                    {showPass ? "Hide" : "Show"}
+                  </button>
+                </div>
               </div>
+
               <div className="group">
                 <label className="ml-1 block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2 transition-colors group-focus-within:text-indigo-400">
                   Confirm
                 </label>
-                <input 
-                  type="password" 
-                  {...register("confirmPassword")} 
-                  placeholder="••••••••"
-                  className={`w-full bg-white/5 border px-4 py-3.5 rounded-2xl text-white outline-none transition-all placeholder:text-slate-600 focus:bg-white/10 ${errors.confirmPassword ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' : 'border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'}`} 
-                />
+                <div className="relative">
+                  <input 
+                    type={showConfirm ? "text" : "password"} 
+                    {...register("confirmPassword")} 
+                    placeholder="••••••••"
+                    className={`w-full bg-white/5 border px-4 py-3.5 pr-12 rounded-2xl text-white outline-none transition-all placeholder:text-slate-600 focus:bg-white/10 ${errors.confirmPassword ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' : 'border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'}`} 
+                  />
+                  <button 
+                    type="button" 
+                    onClick={() => setShowConfirm(!showConfirm)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold uppercase text-indigo-400 hover:text-white transition-colors"
+                  >
+                    {showConfirm ? "Hide" : "Show"}
+                  </button>
+                </div>
               </div>
             </div>
+
             {(errors.password || errors.confirmPassword) && (
               <p className="text-xs text-red-400 ml-1">
                 {errors.password?.message || errors.confirmPassword?.message}

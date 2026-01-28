@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -14,7 +14,8 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  
+  const [datatype, setDatatype] = useState("password");
+
   // 2. Initialize Hook Form
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -40,17 +41,21 @@ const Login: React.FC = () => {
     }
   };
 
+  // Improved toggle function
+  const togglePasswordVisibility = (e: React.MouseEvent) => {
+    e.preventDefault(); // Extra precaution
+    setDatatype(prev => prev === "password" ? "text" : "password");
+  };
+
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-[#0f172a] overflow-hidden px-4">
-      {/* Dynamic Background Elements - Matches Register Page */}
+      {/* Background Blobs */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/20 blur-[120px] animate-pulse"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/20 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
 
       <div className="relative w-full max-w-md">
-        {/* Glassmorphic Card */}
         <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/5 p-8 backdrop-blur-2xl shadow-2xl">
           
-          {/* Header */}
           <div className="mb-10 text-center">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30">
               <span className="text-3xl font-bold text-white">H</span>
@@ -65,14 +70,12 @@ const Login: React.FC = () => {
               <label className="ml-1 block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2 transition-colors group-focus-within:text-indigo-400">
                 Work Email
               </label>
-              <div className="relative">
-                <input 
-                  {...register("email")}
-                  type="email"
-                  placeholder="employee@harmony.com"
-                  className={`w-full bg-white/5 border px-4 py-4 rounded-2xl text-white outline-none transition-all placeholder:text-slate-600 focus:bg-white/10 ${errors.email ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' : 'border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'}`}
-                />
-              </div>
+              <input 
+                {...register("email")}
+                type="email"
+                placeholder="employee@harmony.com"
+                className={`w-full bg-white/5 border px-4 py-4 rounded-2xl text-white outline-none transition-all placeholder:text-slate-600 focus:bg-white/10 ${errors.email ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' : 'border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'}`}
+              />
               {errors.email && <p className="mt-2 text-xs text-red-400 ml-1">{errors.email.message}</p>}
             </div>
 
@@ -83,37 +86,41 @@ const Login: React.FC = () => {
                   Password
                 </label>
                 <Link to="/forgot-password" className="text-xs font-medium text-indigo-400 hover:text-indigo-300">
-                  Forgot?
+                  Forgot Password?
                 </Link>
               </div>
               <div className="relative">
                 <input 
                   {...register("password")}
-                  type="password"
+                  type={datatype}
                   placeholder="••••••••"
-                  className={`w-full bg-white/5 border px-4 py-4 rounded-2xl text-white outline-none transition-all placeholder:text-slate-600 focus:bg-white/10 ${errors.password ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' : 'border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'}`}
+                  className={`w-full bg-white/5 border px-4 py-4 pr-16 rounded-2xl text-white outline-none transition-all placeholder:text-slate-600 focus:bg-white/10 ${errors.password ? 'border-red-500/50 focus:border-red-500 focus:ring-4 focus:ring-red-500/10' : 'border-white/10 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'}`}
                 />
+                {/* The Fix: type="button" and positioned absolutely */}
+                <button 
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold uppercase tracking-tighter text-indigo-400 hover:text-white transition-colors"
+                >
+                  {datatype === "password" ? "Show" : "Hide"}
+                </button>
               </div>
               {errors.password && <p className="mt-2 text-xs text-red-400 ml-1">{errors.password.message}</p>}
             </div>
 
-            {/* Submit Button */}
             <button 
               disabled={isSubmitting}
               className="group relative w-full overflow-hidden rounded-2xl bg-indigo-600 py-4 font-bold text-white transition-all hover:bg-indigo-500 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-indigo-500/20"
             >
-              {/* Shimmer Effect */}
               <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
                 <div className="relative h-full w-8 bg-white/20"></div>
               </div>
-              
               <span className="relative">
                 {isSubmitting ? 'Verifying...' : 'Sign In'}
               </span>
             </button>
           </form>
 
-          {/* Footer Link */}
           <div className="mt-8 text-center text-sm text-slate-400">
             New to Harmony?{' '}
             <Link to="/register" className="font-bold text-white hover:text-indigo-400 transition-colors border-b border-white/20 hover:border-indigo-400/50 pb-0.5">
@@ -122,7 +129,6 @@ const Login: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Decorative Tagline */}
         <p className="mt-6 text-center text-xs text-slate-500 uppercase tracking-[0.2em]">
           Secure Access • Global Harmony
         </p>
