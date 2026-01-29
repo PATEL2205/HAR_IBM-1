@@ -9,6 +9,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
+load_dotenv()
 # Load .env from project root (one level above `backend/`)
 ROOT_DIR = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT_DIR / '.env')
@@ -27,14 +28,12 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 # Database configuration
-MYSQL_USER = os.getenv('MYSQL_USER', 'root')
-MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'password')
-MYSQL_HOST = os.getenv('MYSQL_HOST', 'localhost')
-MYSQL_DB = os.getenv('MYSQL_DB', 'har_ibm')
+# MYSQL_USER = os.getenv('MYSQL_USER', 'root')
+# MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'password')
+# MYSQL_HOST = os.getenv('MYSQL_HOST', 'localhost')
+# MYSQL_DB = os.getenv('MYSQL_DB', 'har_ibm')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}'
-)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQL_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()
