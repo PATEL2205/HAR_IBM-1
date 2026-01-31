@@ -122,5 +122,5 @@ dhruvjethwani22@gnu.ac.in
 
 ---
 
-Thank you 
+Thank you.
 
