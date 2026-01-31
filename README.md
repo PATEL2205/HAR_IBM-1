@@ -117,15 +117,10 @@ npm run dev
 
 ---
 
-## 📄 License
-Add a LICENSE file (suggest MIT) and update this section accordingly.
-
----
-
 ## ✉️ Contact
-If you want help polishing this repository for GitHub (badges, CI, Dockerfile, README improvements), open an issue or DM.
+dhruvjethwani22@gnu.ac.in
 
 ---
 
-Thank you — ready to help update this README further (examples, screenshots, badges) if you want! 💡
+Thank you 
 
