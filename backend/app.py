@@ -145,6 +145,7 @@ def fetch_users():
         "users": result
     })
 
+
 @app.route("/api/check-db", methods=["GET"])
 def check_db():
     try:
