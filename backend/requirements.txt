@@ -1,2 +1,8 @@
-
+cryptography
+Flask>=2.2
+Flask-Cors
+Flask-SQLAlchemy
+Flask-Login
 python-dotenv
+pillow
+pymysql

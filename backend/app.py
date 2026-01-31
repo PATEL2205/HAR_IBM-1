@@ -15,6 +15,8 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT_DIR / '.env')
 
 app = Flask(__name__)
+# Secret key for session management (use .env SECRET_KEY)
+app.secret_key = os.getenv('SECRET_KEY', 'dev_secret_key')
 # This line tells Flask to allow requests from your React app
 CORS(app)
 # Upload folder configuration (read from .env or fall back to backend/static)
@@ -28,12 +30,13 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 # Database configuration
-# MYSQL_USER = os.getenv('MYSQL_USER', 'root')
-# MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'password')
-# MYSQL_HOST = os.getenv('MYSQL_HOST', 'localhost')
-# MYSQL_DB = os.getenv('MYSQL_DB', 'har_ibm')
+MYSQL_USER = os.getenv('MYSQL_USER', 'Dhruv')
+MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'password')
+MYSQL_HOST = os.getenv('MYSQL_HOST', 'localhost')
+MYSQL_DB = os.getenv('MYSQL_DB', 'har_ibm')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQL_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}"
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy()
@@ -73,7 +76,7 @@ def login():
     if user and user.verify_password(password):
         return jsonify({"message": "Login successful"}), 200
     else:
-        return jsonify({"error": "Email already registered"}), 400
+        return jsonify({"error": "Invalid email or password"}), 401
 
     
 
@@ -88,7 +91,7 @@ def register():
     if User.check_user(email):
         return jsonify({"error": "Email already registered"}), 400
     if password != confirm_pass:
-        return jsonify({"message": "Passwords don't match"}), 400
+        return jsonify({"error": "Passwords don't match"}), 400
     
     hashed_password = generate_password_hash(password)
     new_user = User(name=name, email=email, password=hashed_password)
