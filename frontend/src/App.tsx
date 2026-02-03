@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Dashboard } from './components/pages/Dashboard'; 
-import { ThemeProvider } from './components/context/ThemeContext';
 
 interface ApiResponse {
   message: string;
@@ -36,10 +35,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <ThemeProvider>
-        <Dashboard /> 
-      </ThemeProvider>
-      
+      <Dashboard />       
     </>
   );
 };
