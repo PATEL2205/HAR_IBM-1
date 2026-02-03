@@ -1,1 +1,69 @@
 @import "tailwindcss";
+
+/* ===============================
+   PROFESSIONAL SAAS THEME (v4)
+   =============================== */
+
+@layer base {
+  :root {
+    --bg-main: 248 250 252;      /* slate-50 */
+    --bg-card: 255 255 255;     /* white */
+    --bg-muted: 241 245 249;    /* slate-100 */
+
+    --border-main: 226 232 240; /* slate-200 */
+
+    --text-main: 15 23 42;      /* slate-900 */
+    --text-muted: 100 116 139;  /* slate-500 */
+
+    --brand: 37 99 235;         /* blue-600 */
+    --brand-hover: 29 78 216;   /* blue-700 */
+  }
+
+  .dark {
+    --bg-main: 2 6 23;          /* slate-950 */
+    --bg-card: 2 6 23;
+    --bg-muted: 15 23 42;       /* slate-900 */
+
+    --border-main: 30 41 59;    /* slate-800 */
+
+    --text-main: 248 250 252;   /* slate-50 */
+    --text-muted: 148 163 184;  /* slate-400 */
+  }
+
+  body {
+    background: rgb(var(--bg-main));
+    color: rgb(var(--text-main));
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border shadow-lg;
+    background: rgb(var(--bg-card));
+    border-color: rgb(var(--border-main));
+  }
+
+  .input {
+    @apply w-full rounded-lg px-4 py-3 outline-none transition;
+    background: rgb(var(--bg-card));
+    border: 1px solid rgb(var(--border-main));
+  }
+
+  .input:focus {
+    border-color: rgb(var(--brand));
+    box-shadow: 0 0 0 3px rgb(var(--brand) / 0.2);
+  }
+
+  .btn-primary {
+    @apply rounded-lg px-4 py-3 font-semibold text-white transition;
+    background: rgb(var(--brand));
+  }
+
+  .btn-primary:hover {
+    background: rgb(var(--brand-hover));
+  }
+
+  .muted {
+    color: rgb(var(--text-muted));
+  }
+}
